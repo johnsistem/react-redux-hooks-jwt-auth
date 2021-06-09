@@ -8,7 +8,7 @@ const BoardAdmin = () => {
   useEffect(() => {
     UserService.getAdminBoard().then(
       (response) => {
-        setContent(response.data);
+        setContent(JSON.parse(response.data));
       },
       (error) => {
         const _content =
@@ -27,6 +27,9 @@ const BoardAdmin = () => {
     <div className="container">
       <header className="jumbotron">
         <h3>{content}</h3>
+        {content.map((i) => {
+          console.log(i);
+        })}
       </header>
     </div>
   );

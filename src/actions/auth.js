@@ -4,7 +4,7 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
-  SET_MESSAGE,
+  SET_MESSAGE
 } from "./types";
 
 import AuthService from "../services/auth.service";
@@ -13,12 +13,12 @@ export const register = (username, email, password) => (dispatch) => {
   return AuthService.register(username, email, password).then(
     (response) => {
       dispatch({
-        type: REGISTER_SUCCESS,
+        type: REGISTER_SUCCESS
       });
 
       dispatch({
         type: SET_MESSAGE,
-        payload: response.data.message,
+        payload: response.data.message
       });
 
       return Promise.resolve();
@@ -32,12 +32,12 @@ export const register = (username, email, password) => (dispatch) => {
         error.toString();
 
       dispatch({
-        type: REGISTER_FAIL,
+        type: REGISTER_FAIL
       });
 
       dispatch({
         type: SET_MESSAGE,
-        payload: message,
+        payload: message
       });
 
       return Promise.reject();
@@ -46,41 +46,23 @@ export const register = (username, email, password) => (dispatch) => {
 };
 
 export const login = (username, password) => (dispatch) => {
-  return AuthService.login(username, password).then(
-    (data) => {
-      dispatch({
-        type: LOGIN_SUCCESS,
-        payload: { user: data },
-      });
+  return AuthService.login(username, password).then((data) => {
+    console.log(data);
+    console.log(username);
+    console.log(password);
+    dispatch({
+      type: LOGIN_SUCCESS,
+      payload: { user: data, username: username, password: password }
+    });
 
-      return Promise.resolve();
-    },
-    (error) => {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-
-      dispatch({
-        type: LOGIN_FAIL,
-      });
-
-      dispatch({
-        type: SET_MESSAGE,
-        payload: message,
-      });
-
-      return Promise.reject();
-    }
-  );
+    return Promise.resolve();
+  });
 };
 
 export const logout = () => (dispatch) => {
   AuthService.logout();
 
   dispatch({
-    type: LOGOUT,
+    type: LOGOUT
   });
 };

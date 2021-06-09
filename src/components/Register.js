@@ -56,8 +56,9 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [successful, setSuccessful] = useState(false);
-
-  const { message } = useSelector(state => state.message);
+  const [alert, setAlert] = useState(true);
+  const { message } = useSelector((state) => state.message);
+  console.log(message);
   const dispatch = useDispatch();
 
   const onChangeUsername = (e) => {
@@ -84,15 +85,29 @@ const Register = () => {
 
     if (checkBtn.current.context._errors.length === 0) {
       dispatch(register(username, email, password))
-        .then(() => {
-          setSuccessful(true);
+        .then((res) => {
+          console.log(res);
+          alert("Logged In");
+          setAlert(false);
         })
         .catch(() => {
-          setSuccessful(false);
+          setAlert(true);
         });
     }
   };
-
+  const renderAuthButton = () => {
+    if (alert) {
+      return null;
+    } else {
+      return (
+        <div className="form-group">
+          <div className="alert alert-danger" role="alert">
+            Logged I
+          </div>
+        </div>
+      );
+    }
+  };
   return (
     <div className="col-md-12">
       <div className="card card-container">
@@ -149,13 +164,19 @@ const Register = () => {
 
           {message && (
             <div className="form-group">
-              <div className={ successful ? "alert alert-success" : "alert alert-danger" } role="alert">
+              <div
+                className={
+                  successful ? "alert alert-success" : "alert alert-danger"
+                }
+                role="alert"
+              >
                 {message}
               </div>
             </div>
           )}
           <CheckButton style={{ display: "none" }} ref={checkBtn} />
         </Form>
+        {renderAuthButton()}
       </div>
     </div>
   );
